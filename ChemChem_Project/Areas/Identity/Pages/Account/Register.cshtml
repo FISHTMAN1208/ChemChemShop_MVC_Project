@@ -1,0 +1,126 @@
+﻿@page
+@model RegisterModel
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-4">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="py-2 text-white">Đăng ký</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body p-4">
+        <div class="row pt-4">
+            <div class="col-md-12">
+                <form id="registerForm" class="row" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <h2 class="text-center">Tạo một tài khoản mới</h2>
+                    <hr />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-floating mb-3 col-md-12">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                        <label asp-for="Input.Email" class="ms-2 text-muted">Email</label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                        <label asp-for="Input.Password" class="ms-2 text-muted">Mật khẩu</label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                        <label asp-for="Input.ConfirmPassword" class="ms-2 text-muted">Xác nhận mật khẩu</label>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.Name" class="form-control" aria-required="true" />
+                        <label asp-for="Input.Name" class="ms-2 text-muted">Họ và tên</label>
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.StreetAddress" class="form-control" aria-required="true" />
+                        <label asp-for="Input.StreetAddress" class="ms-2 text-muted">Số nhà</label>
+                        <span asp-validation-for="Input.StreetAddress" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.City" class="form-control" aria-required="true" />
+                        <label asp-for="Input.City" class="ms-2 text-muted">Thành phố</label>
+                        <span asp-validation-for="Input.City" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.District" class="form-control" aria-required="true" />
+                        <label asp-for="Input.District" class="ms-2 text-muted"> Quận/Huyện</label>
+                        <span asp-validation-for="Input.District" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.PostalCode" class="form-control" aria-required="true" />
+                        <label asp-for="Input.PostalCode" class="ms-2 text-muted">Mã bưu chính</label>
+                        <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+                    </div>
+                   
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.PhoneNumber" class="form-control" aria-required="true" />
+                        <label asp-for="Input.PhoneNumber" class="ms-2 text-muted">Số điện thoại</label>
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3 col-md-6">
+                        <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
+                            <option disabled selected>--Chọn vai trò--</option>
+                        </select>
+
+                    </div>
+
+                    <div class="col-12">
+                        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng ký</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-12">
+                <section>
+                    <p class="divider-text d-flex pt-2">hoặc</p>
+                    <br />
+                    <h3>Sử dụng dịch vụ khác để đăng nhập</h3>
+
+                    <hr />
+                    @{
+                        if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                        {
+                            <div>
+                                <p>
+
+                                    Không có dịch vụ xác thực bên ngoài nào được cấu hình. Xem bài viết này <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                        về việc thiết lập ứng dụng ASP.NET này để hỗ trợ đăng nhập thông qua các dịch vụ bên ngoài
+                                    </a>.
+                                </p>
+                            </div>
+                        }
+                        else
+                        {
+                            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                <div>
+                                    <p>
+                                        @foreach (var provider in Model.ExternalLogins!)
+                                        {
+                                            <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Đăng nhập bằng tài khoản @provider.DisplayName của bạn">@provider.DisplayName</button>
+                                        }
+                                    </p>
+                                </div>
+                            </form>
+                        }
+                    }
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
